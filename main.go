@@ -1,8 +1,8 @@
 package main
 
 import (
-	"tekdraw-bff/controller"
 	"tekdraw-bff/pkg"
+	"tekdraw-bff/service"
 	"tekdraw-bff/utils"
 
 	"github.com/gin-gonic/gin"
@@ -17,8 +17,8 @@ func main() {
 	// API Blogs
 	router := r.Group("/api/v1/users")
 	{
-		router.GET("/", controller.GetUser)
-		router.POST("/", controller.AddUser)
+		router.GET("/", service.GetUser)
+		router.POST("/", service.AddUser)
 	}
 
 	// By default it serves on :8080
