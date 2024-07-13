@@ -1,20 +1,23 @@
 # Use an official Golang runtime as a parent image
 FROM golang:1.20-alpine
 
-# Set the working directory to /app
+RUN apk add --no-cache \
+    # Important: required for go-sqlite3
+    gcc \
+    # Required for Alpine
+    musl-dev
+
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
-COPY . /app
+COPY . .
 
-# Download and install any required dependencies
 RUN go mod download
 
 # Build the Go app
-RUN go build -o main .
+RUN CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build  -o /out/main ./
 
 # Expose port 8080 for incoming traffic
 EXPOSE 8080
 
 # Define the command to run the app when the container starts
-CMD ["/app/main"]
+ENTRYPOINT ["/out/main"]
