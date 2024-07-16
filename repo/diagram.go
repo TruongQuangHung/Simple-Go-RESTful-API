@@ -18,12 +18,17 @@ func GetDiagram(id int) (*model.Diagram, error) {
 	return &diagram, nil
 }
 
-func AddDiagram(userId int, dType string, code string) error {
-	return pkg.DB.Table("diagrams").Create(&model.Diagram{
+func AddDiagram(userId int, dType string, code string) (int, error) {
+	diagram := model.Diagram{
 		UserId: userId,
 		Type:   dType,
 		Code:   code,
-	}).Error
+	}
+	result := pkg.DB.Table("diagrams").Create(&diagram)
+	if result.Error != nil {
+		return 0, result.Error
+	}
+	return diagram.Id, nil
 }
 
 func UpdateDiagram(id int, request model.UpdateDiagramRequest) error {
