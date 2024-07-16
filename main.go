@@ -21,6 +21,15 @@ func main() {
 		router.POST("/", service.AddUser)
 	}
 
+	// API Diagram
+	router = r.Group("/api/v1/diagrams")
+	{
+		router.GET("/", service.GetDiagram)
+		router.POST("/", service.AddDiagram)
+		router.PUT("/:id", service.UpdateDiagram)    // Add route for updating a diagram
+		router.DELETE("/:id", service.DeleteDiagram) // Add route for deleting a diagram
+	}
+
 	// By default it serves on :8080
-	r.Run()
+	r.Run(":10080")
 }
