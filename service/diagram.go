@@ -42,13 +42,13 @@ func AddDiagram(c *gin.Context) {
 		c.JSON(400, gin.H{"error": "invalid params"})
 		return
 	}
-	err = repo.AddDiagram(request.UserId, request.Type, request.Code)
+	id, err := repo.AddDiagram(request.UserId, request.Type, request.Code)
 	if err != nil {
 		utils.HandleError(c, err)
 		return
 	}
 
-	c.JSON(200, gin.H{"msg": "success"})
+	c.JSON(200, gin.H{"msg": "success", "id": id})
 }
 
 func UpdateDiagram(c *gin.Context) {
