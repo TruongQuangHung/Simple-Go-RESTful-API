@@ -31,5 +31,5 @@ func main() {
 	}
 
 	// By default it serves on :8080
-	r.Run(":10080")
+	r.Run(":8080")
 }
