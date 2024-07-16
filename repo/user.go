@@ -2,6 +2,7 @@ package repo
 
 import (
 	"fmt"
+
 	"tekdraw-bff/model"
 	"tekdraw-bff/pkg"
 )
@@ -19,18 +20,23 @@ func GetUser(name, password string) (*model.User, error) {
 	return &user, nil
 }
 
-func AddUser(name, password string) error {
-	users := []model.User{}
-	err := pkg.DB.Find(&users, "name = ?", name).Table("users").Error
+func AddUser(name, password string) (int, error) {
+	var count int64
+	err := pkg.DB.Table("users").Where("name = ?", name).Count(&count).Error
 	if err != nil {
-		return err
+		return 0, err
 	}
-	if len(users) != 0 {
-		return fmt.Errorf("user name exist")
+	if count > 0 {
+		return 0, fmt.Errorf("user name exists")
 	}
 
-	return pkg.DB.Table("users").Create(&model.User{
+	user := model.User{
 		Name:     name,
 		Password: password,
-	}).Error
+	}
+	result := pkg.DB.Table("users").Create(&user)
+	if result.Error != nil {
+		return 0, result.Error
+	}
+	return user.Id, nil
 }

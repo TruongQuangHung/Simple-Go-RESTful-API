@@ -34,11 +34,11 @@ func AddUser(c *gin.Context) {
 		c.JSON(400, gin.H{"error": "invalid params"})
 		return
 	}
-	err = repo.AddUser(request.Name, request.Password)
+	id, err := repo.AddUser(request.Name, request.Password)
 	if err != nil {
 		utils.HandleError(c, err)
 		return
 	}
 
-	c.JSON(200, gin.H{"msg": "success"})
+	c.JSON(200, gin.H{"msg": "success", "id": id})
 }
